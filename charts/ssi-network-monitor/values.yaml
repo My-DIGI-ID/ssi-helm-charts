@@ -1,0 +1,4 @@
+seed:
+genesisUrl:
+networkName: example
+intervalSeconds: 30
