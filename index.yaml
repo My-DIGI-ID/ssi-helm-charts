@@ -3,6 +3,16 @@ entries:
   ssi-network-monitor:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-09-22T07:45:30.318167315Z"
+    description: A monitoring Source hyperledger indy networks
+    digest: 8c2d7e68015ea490d01f800cc1c0b7ef3eeefa10f013a5dbfd51b00a8e9d06ab
+    name: ssi-network-monitor
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-network-monitor-0.2.0/ssi-network-monitor-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-09-21T17:12:59.030109924Z"
     description: A monitoring Source hyperledger indy networks
     digest: 403b6254c6bacd8c61471349c7f3d1b0cd02badffdfb7366a4e759f6477e7d08
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-network-monitor-0.1.0/ssi-network-monitor-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-21T17:12:59.030115024Z"
+generated: "2021-09-22T07:45:30.318174015Z"
