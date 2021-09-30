@@ -1,0 +1,43 @@
+# Default values for ssi-tails-server.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## For multiple instances must make sure PVC is ReadWriteMany
+replicaCount: 1
+
+image:
+  repository: ghcr.io/my-digi-id/ssi-acmgt-accreditation-tails-server
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  # Service account not needed and can cause issue with OpenShift
+  create: false
+
+# The default docker image has been built for port 6543 - only modify this if image has been changed
+service:
+  type: ClusterIP
+  port: 6543
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+volumeSettings:
+  # This is a storage class on IBM Cloud OpenShift Cluster
+  storageClassName: ibmc-vpc-block-10iops-tier 
+  storageCapacity: 10Gi
+  # Only change this if the docker image has been modified - this should be the default
+  hostPath: "/home/indy/.indy_client"
+
+env:
+  TAILS_SERVER_ADDRESS: "0.0.0.0"
+  TAILS_SERVER_PORT: "6543"
+  TAILS_SERVER_LOG_LEVEL: "debug"

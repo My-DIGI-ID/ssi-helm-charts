@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-{{include "ssi-tails-server.fullname" . }}
+spec:
+  storageClassName: {{ .Values.volumeSettings.storageClassName | default "default" }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.volumeSettings.storageCapacity | default "5Gi" }}

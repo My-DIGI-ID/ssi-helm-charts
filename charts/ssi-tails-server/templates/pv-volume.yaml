@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-{{include "ssi-tails-server.fullname" . }}
+spec:
+  storageClassName: {{ .Values.volumeSettings.storageClassName | default "default" }}
+  capacity:
+    storage: {{ .Values.volumeSettings.storageCapacity | default "5Gi" }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.volumeSettings.hostPath | default "/" | quote }}
+
+
+#oc set volumes dc/${TAILS_SERVER_CONTAINER_NAME} \
+# --add --name ${TAILS_SERVER_CONTAINER_NAME}-storage --type pvc --claim-class ibmc-vpc-block-10iops-tier \
+# --claim-mode rwo --claim-size 10Gi --mount-path /home/indy/.indy_client \
+# --claim-name ${TAILS_SERVER_CONTAINER_NAME}-storage \
+# -n $ACCR_OSNAMESPACE 
