@@ -31,4 +31,15 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-network-monitor-0.1.0/ssi-network-monitor-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-29T14:57:46.217819161Z"
+  ssi-tails-server:
+  - apiVersion: v2
+    appVersion: 1.1.0
+    created: "2021-09-30T15:11:53.331883238Z"
+    description: A Helm chart for Kubernetes
+    digest: bec5ea2713755b668bb0ca9bacd7aec0230045990995bd6468f933b8c215cbdf
+    name: ssi-tails-server
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-tails-server-0.1.0/ssi-tails-server-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-09-30T15:11:53.331894439Z"
