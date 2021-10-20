@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "ssi-tails-server.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "ssi-tails-server.labels" . | nindent 4 }}
 spec:
@@ -55,6 +56,12 @@ spec:
             - mountPath:  {{ .Values.volumeSettings.hostPath | default "/" | quote }}
               name: task-pv-storage
           env:
+            - name: TAILS_SERVER_ADDRESS
+              value: {{ .Values.tails.address | default "0.0.0.0" | quote }}
+            - name: TAILS_SERVER_PORT
+              value: {{ .Values.service.port | default "6543" | quote }}
+            - name: TAILS_SERVER_LOG_LEVEL
+              value: {{ .Values.tails.loglevel | default "info" | quote }}
             {{- include "helpers.list-env-variables" . | indent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

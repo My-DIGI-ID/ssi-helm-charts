@@ -6,7 +6,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/my-digi-id/ssi-acmgt-accreditation-tails-server
+  repository: ghcr.io/my-digi-id/ssi-acmgt-indy-tails-server
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -22,6 +22,7 @@ serviceAccount:
 # The default docker image has been built for port 6543 - only modify this if image has been changed
 service:
   type: ClusterIP
+  # Default is 6543 - only change if base image is exposing different port
   port: 6543
 
 ingress:
@@ -31,13 +32,16 @@ autoscaling:
   enabled: false
 
 volumeSettings:
-  # This is a storage class on IBM Cloud OpenShift Cluster
-  storageClassName: ibmc-vpc-block-10iops-tier 
+  # Required to provide so the tails server can run multiple replicas
+  storageClassName: 
   storageCapacity: 10Gi
   # Only change this if the docker image has been modified - this should be the default
   hostPath: "/home/indy/.indy_client"
+  accessModes: 
 
-env:
-  TAILS_SERVER_ADDRESS: "0.0.0.0"
-  TAILS_SERVER_PORT: "6543"
-  TAILS_SERVER_LOG_LEVEL: "debug"
+tails:
+  # Default is internal "0.0.0.0" addres, only change if required for new image build
+  address:
+  loglevel: "debug"
+
+env: {}
