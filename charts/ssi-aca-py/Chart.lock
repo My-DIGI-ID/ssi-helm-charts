@@ -1,0 +1,9 @@
+dependencies:
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.10.1
+- name: ssi-tails-server
+  repository: https://my-digi-id.github.io/ssi-helm-charts/
+  version: 0.1.0
+digest: sha256:414f6bbf763c631f1cffb0b89ddb78b37aa89a7381fe0cfee0fbb5048bdb3f87
+generated: "2021-09-30T17:30:58.431131793+02:00"

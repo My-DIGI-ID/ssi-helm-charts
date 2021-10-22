@@ -1,0 +1,156 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ssi-aca-py.fullname" . }}
+  labels:
+    {{- include "ssi-aca-py.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "ssi-aca-py.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "ssi-aca-py.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ssi-aca-py.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - >
+              set -x;
+              aca-py provision;
+              aca-py start
+              --admin $ACAPY_ADMIN
+              --inbound-transport $ACAPY_INBOUND_TRANSPORT ;
+          ports:
+            - name: client
+              containerPort: 11000
+              protocol: TCP
+            - name: admin
+              containerPort: 11080
+              protocol: TCP
+          env:
+          - name: ACAPY_LABEL
+            value: {{ .Values.agentName }}
+          - name: ACAPY_ENDPOINT
+            value: http://{{ include "ssi-aca-py.fullname" . }}:11000
+          - name: ACAPY_ADMIN
+            value: "0.0.0.0 11080"
+          - name: ACAPY_INBOUND_TRANSPORT
+            value: "http 0.0.0.0 11000"
+          - name: ACAPY_OUTBOUND_TRANSPORT
+            value: "http"
+          - name: ACAPY_ADMIN_API_KEY
+            value: {{ .Values.apiKey }}
+          - name: ACAPY_GENESIS_URL
+            value: {{ .Values.genesisUrl }}
+          - name: ACAPY_AUTO_RESPOND_CREDENTIAL_PROPOSAL
+            value: "true"
+          - name: ACAPY_AUTO_ACCEPT_REQUESTS
+            value: "true"
+          {{- if .Values.isIssuer }}
+          - name: ACAPY_AUTO_PROVISION
+            value: "true"
+          {{- end }}
+          - name: ACAPY_AUTO_RESPOND_CREDENTIAL_REQUEST
+            value: "true"
+          - name: ACAPY_AUTO_RESPOND_CREDENTIAL_OFFER
+            value: "true"
+          - name: ACAPY_AUTO_ACCEPT_REQUESTS
+            value: "true"
+          - name: ACAPY_AUTO_VERIFY_PRESENTATION
+            value: "true"
+          {{- if and .Values.webhook.url .Values.webhook.url .Values.webhook.apiKey}}
+          - name: ACAPY_WEBHOOK_URL
+            value: {{ .Values.webhook.url}}#{{ .Values.webhook.apiKey }}
+          {{- end }}
+          - name: ACAPY_LOG_LEVEL
+            value: {{ .Values.logLevel }}
+          {{- if .Values.isIssuer }}
+          - name: ACAPY_TAILS_SERVER_BASE_URL
+          {{- if .Values.ingress.enabled }}
+            value: {{ if .Values.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.ingress.subdomainPrefix}}tails.{{ .Values.ingress.host }}
+          {{- else }}
+            value: {{ default (printf "%s-ssi-tails-server:6543" .Release.Name) .Values.tailsServerEndpoint }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.seed }}
+          - name: ACAPY_WALLET_SEED
+            value: {{ .Values.seed }}
+          {{- end }}
+          {{- if not .Values.isIssuer }}
+          - name: ACAPY_WALLET_LOCAL_DID
+            value: "true"
+          {{- end }}
+          - name: ACAPY_WALLET_KEY
+            value: {{ .Values.wallet.key }}
+          - name: ACAPY_WALLET_NAME
+            value: {{ .Values.wallet.name }}
+          - name: ACAPY_WALLET_TYPE
+            value: indy
+          - name: ACAPY_WALLET_STORAGE_TYPE
+            value: {{ .Values.wallet.storageType }}
+          {{- if eq .Values.wallet.storageType "postgres_storage" }}
+          - name: ACAPY_WALLET_STORAGE_CONFIG
+            value: {{ include "ssi-aca-py.postgresConfig" . | toJson }}
+          - name: ACAPY_WALLET_STORAGE_CREDS
+            value: {{ include "ssi-aca-py.postgresCredentials" . | toJson }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: client
+          readinessProbe:
+            httpGet:
+              path: /
+              port: client
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      initContainers:
+        {{- if .Values.postgresql.enabled }}
+        - image: docker.io/bitnami/postgresql:11.13.0-debian-10-r33
+          name: wait-for-postgres
+          command: 
+          - sh
+          - -c
+          - >
+            while true; do 
+            pg_isready 
+            -U "{{ .Values.postgresql.postgresqlUsername }}" 
+            -h {{ .Release.Name }}-postgresql -p 5432 
+            && break 
+            || sleep 5; 
+            done
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

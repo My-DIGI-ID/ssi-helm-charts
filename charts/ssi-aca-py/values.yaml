@@ -1,0 +1,123 @@
+# Default values for ssi-aca-py.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/my-digi-id/ssi-aca-py
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.0.0"
+
+
+logLevel: info
+agentName: Aries-Cloudagent
+genesisUrl: 
+apiKey:
+
+isIssuer: false
+schemaId: 
+credentialName: 
+seed: 
+
+webhook:
+  url:
+  apikey: 
+
+# tailsServerEndpoint: aries:6543
+
+wallet:
+  storageType: postgres_storage
+  key:
+  name: wallet
+
+postgresql:
+  # enabled = false for not deploying postgresss subchart, 
+  enabled: true
+  # leave blank to connect to internal postgres
+  url:
+  postgresqlPostgresPassword: 
+  postgresqlUsername: defaultdb
+  postgresqlPassword: 
+  postgresqlDatabase: defaultdb
+  persistence:
+    storageClass:
+  volumePermissions:
+    enabled: false
+    securityContext:
+      runAsUser: "auto"
+  securityContext:
+    # disable to run as random user in openshift
+    enabled: false
+  shmVolume:
+    chmod:
+      enabled: false         
+  containerSecurityContext:
+    enabled: false
+
+ssi-tails-server:
+  volumeSettings:
+    # This is a storage class on IBM Cloud OpenShift Cluster
+    storageClassName:
+    storageCapacity: 10Gi
+    # Only change this if the docker image has been modified - this should be the default
+    hostPath: "/home/indy/.indy_client"
+  
+
+imagePullSecrets: []
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  exposeAdmin: true
+
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  subdomainPrefix: ""
+  host: ""
+  tls: 
+    - secretName: tls-secret
+  
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 750m
+    memory: 750Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
