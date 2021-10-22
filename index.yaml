@@ -1,5 +1,26 @@
 apiVersion: v1
 entries:
+  ssi-aca-py:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-10-22T09:12:39.772117757Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.10.1
+    - condition: isIssuer
+      name: ssi-tails-server
+      repository: https://my-digi-id.github.io/ssi-helm-charts/
+      version: 0.1.0
+    description: A Helm chart for Kubernetes
+    digest: 30f50695a2a89fff2e8d5b6601804d215a4ef2fe55c3244de9e8f658324f6c95
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Smiley.jpg/261px-A_Smiley.jpg
+    name: ssi-aca-py
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-aca-py-0.1.0/ssi-aca-py-0.1.0.tgz
+    version: 0.1.0
   ssi-network-monitor:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -62,4 +83,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-tails-server-0.1.0/ssi-tails-server-0.1.0.tgz
     version: 0.1.0
-generated: "2021-10-21T06:55:33.002641774Z"
+generated: "2021-10-22T09:12:39.772135158Z"
