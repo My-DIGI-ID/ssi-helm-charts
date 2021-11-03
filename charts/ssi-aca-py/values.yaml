@@ -56,6 +56,18 @@ postgresql:
   containerSecurityContext:
     enabled: false
 
+initScript:
+  enabled: false
+  # script: |
+  #   echo "Initialized with script from values";
+  #   echo "WEBHOOK_URL: $WEBHOOK_URL";
+  scriptFile: 
+  env: {}
+  # Define which values should be passed as an environment variable
+  envValues: 
+    WEBHOOK_URL: webhook.url
+
+
 ssi-tails-server:
   volumeSettings:
     # This is a storage class on IBM Cloud OpenShift Cluster
@@ -63,6 +75,7 @@ ssi-tails-server:
     storageCapacity: 10Gi
     # Only change this if the docker image has been modified - this should be the default
     hostPath: "/home/indy/.indy_client"
+    accessModes: 
   
 
 imagePullSecrets: []

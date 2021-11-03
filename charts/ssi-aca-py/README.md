@@ -32,10 +32,10 @@ credentialName: CERDENTIAL_NAME
 seed: ISSUER_SEED
 
 webhook:
-  url:  http://accreditation-controller:8080
+  url: http://accreditation-controller:8080
   apikey: WEBHOOK_API_KEY
 
-wallet: 
+wallet:
   key: WALLET_KEY
 
 postgresql:
@@ -58,10 +58,10 @@ seed: VERIFIER_SEED
 isIssuer: false
 
 webhook:
-  url:  http://accreditation-controller:8080
+  url: http://accreditation-controller:8080
   apikey: WEBHOOK_API_KEY
 
-wallet: 
+wallet:
   key: WALLET_KEY
 
 postgresql:
@@ -91,8 +91,8 @@ helm upgrade --install <YOUR_RELEASE_NAME> ssi/ssi-aca-py -f acapy-values.yaml
 | `image.tag`                                              | Image Tag                                                                                                                                                                                     | `"1.0.0"`                              |
 | `apiKey`                                                 | The Aca-Py Api key                                                                                                                                                                            | `""`                                   |
 | `logLevel`                                               | loglevel                                                                                                                                                                                      | `info`                                 |
-| `agentName`                                              | The name of the Agent.                                                                                                                                                                         | `Aries-Cloudagent`                     |
-| `isIssuer`                                               | Specifiy if deploying for issuing or verifying (issuer has tails server bundled and creates credentials)                                                                                      | `false`                                 |
+| `agentName`                                              | The name of the Agent                                                                                                                                                                         | `Aries-Cloudagent`                     |
+| `isIssuer`                                               | Specifiy if deploying for issuing or verifying (issuer has tails server bundled and creates credentials)                                                                                      | `false`                                |
 | `schemaId`                                               | Schema id of the used credential schema                                                                                                                                                       | `""`                                   |
 | `credentialName`                                         | Name of the credential (if it exists on the ledger it must already exist in the wallet, otherwise use a name not existent on the ledger)                                                      | `default`                              |
 | `seed`                                                   | The wallet did Seed (if runnning as issuer it has to be registered on the ledger)                                                                                                             | `""`                                   |
@@ -103,7 +103,7 @@ helm upgrade --install <YOUR_RELEASE_NAME> ssi/ssi-aca-py -f acapy-values.yaml
 | `wallet.key`                                             | The wallet key                                                                                                                                                                                | `""`                                   |
 | `wallet.name`                                            | Name of the wallet                                                                                                                                                                            | `wallet`                               |
 | `postgresql.enabled`                                     | Whether or not to use the bundled postgres (postgres values can be extended by any of [the Bitnami Postgres Chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql/) values) | `true`                                 |
-| `postgresql.url`                                        | URL of the postgres server (leave blank when using internal postgres) )                                                                                                                       | `""`                                   |
+| `postgresql.url`                                         | URL of the postgres server (leave blank when using internal postgres) )                                                                                                                       | `""`                                   |
 | `postgresql.postgresqlPostgresPassword`                  | PostgreSQL admin Password                                                                                                                                                                     | `""`                                   |
 | `postgresql.postgresqlUsername`                          | PostgreSQL username                                                                                                                                                                           | `ariescloudagent`                      |
 | `postgresql.postgresqlPassword`                          | PostgreSQL Password                                                                                                                                                                           | `""`                                   |
@@ -114,8 +114,14 @@ helm upgrade --install <YOUR_RELEASE_NAME> ssi/ssi-aca-py -f acapy-values.yaml
 | `postgresql.securityContext.enabled`                     | Enable security context                                                                                                                                                                       | `false`                                |
 | `postgresql.shmVolume.chmod.enabled`                     | Set to `true` to chmod 777 /dev/shm on a initContainer (ignored if volumePermissions.enabled is `false`)                                                                                      | `false`                                |
 | `postgresql.containerSecurityContext.enabled`            |                                                                                                                                                                                               | `false`                                |
+| `initScript.enabled`                                     | Run a Custom Script on install                                                                                                                                                                | `false`                                |
+| `initScript.script`                                      | A Custom bash script that runs after install                                                                                                                                                  | undefined                              |
+| `initScript.scriptFile`                                  | Path to a file containing a bash script                                                                                                                                                       | ``                                     |
+| `initScript.env`                                         | Environment variables used in the custom init script                                                                                                                                          | `false`                                |
+| `initScript.envValues`                                   | Environment variables used in the custom init script, values specified by the path in the values.yaml file (see example)                                                                      | `{"WEBHOOK_URL": "webhook.url}`        |
 | `ssi-tails-server.volumeSettings.storageClassName`       | Storage class for the tails server pvc                                                                                                                                                        | `nil`                                  |
 | `ssi-tails-server.volumeSettings.storageCapacity`        | Storage capacity for the tails server pvc                                                                                                                                                     | `10Gi`                                 |
+| `ssi-tails-server.volumeSettings.accessModes`        | Access modes for PVC being created.                                                                                                                                                     | `ReadWriteOnce`                                 |
 | `imagePullSecrets`                                       | Pull secrets                                                                                                                                                                                   | `[]`                                  |
 | `ingress.enabled`                                        | Enable ingress routes                                                                                                                                                                         | `true`                                 |
 | `ingress.exposeAdmin`                                    | Expose the acapy admin service as an ingress route                                                                                                                                            | `false`                                |

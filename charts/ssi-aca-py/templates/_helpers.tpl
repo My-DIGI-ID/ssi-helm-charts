@@ -71,3 +71,24 @@ Create the name of the service account to use
 {{- define "ssi-aca-py.postgresCredentials" -}}
 {"account":{{ .Values.postgresql.postgresqlUsername  | quote }},"password":{{ .Values.postgresql.postgresqlPassword | urlquery | quote }},"admin_account":{{ .Values.postgresql.postgresqlUsername | quote }},"admin_password":{{ .Values.postgresql.postgresqlPassword | urlquery | quote }}}
 {{- end }}
+
+{{/*
+Get a nested value from a dict in the the has Values, path and Default defined, from a github issue
+https://github.com/helm/helm/issues/5180
+*/}}
+{{- define "getOrDefault" }}
+  {{- $v := .Values }}
+  {{- $found := true }}
+  {{- range $value := regexSplit "\\." .Path -1 }}
+    {{- if hasKey $v $value }}
+      {{- $v = get $v $value }}
+    {{- else }}
+      {{- $found = false }}
+    {{- end }}
+  {{- end }}
+  {{- if eq $found true }}
+    {{- $v }}
+  {{- else }}
+    {{- .Default }}
+  {{- end }}
+{{- end }}
