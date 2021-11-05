@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ssi-aca-py
-description: A Helm chart for Kubernetes
+description: Aries Cloud Agent
 icon: https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Smiley.jpg/261px-A_Smiley.jpg
 
 # A chart can be either an 'application' or a 'library' chart.
