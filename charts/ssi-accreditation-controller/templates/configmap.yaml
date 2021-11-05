@@ -1,0 +1,39 @@
+{{- $fullName := include "ssi-accreditation-controller.fullname" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-config
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: {{ .Chart.Name }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  ACCR_INFO_VERSION: {{ .Chart.Version }}
+  ACCR_AGENT_PORT_ADMIN: {{ .Values.agent.port | default "11080" | quote }}
+  ACCR_UI_PORT:	{{ .Values.ui.port | default "4200" | quote }}
+  ACCR_UI_HOST: {{ .Values.ui.host | default (printf "http://%s-ssi-accreditation-ui" .Release.Name) | quote }}
+  ACCR_EMAIL_TEMPLATE_GUEST_INVITATION: {{ .Values.overrides.ACCR_EMAIL_TEMPLATE_GUEST_INVITATION | default "/data/templates/guest-invitation-email-template.html" | quote }}
+  ACCR_EMAIL_TEMPLATE_EMPLOYEE_INVITATION: {{ .Values.overrides.ACCR_EMAIL_TEMPLATE_EMPLOYEE_INVITATION | default "/data/templates/employee-invitation-email-template.html"| quote }}
+  ACCR_ID_PROVIDER_PERMISSIONS_PATH: {{ .Values.overrides.ACCR_ID_PROVIDER_PERMISSIONS_PATH | default "auth/realms/{realm}/protocol/openid-connect/token" | quote }}
+  SPRING_PROFILES_ACTIVE: {{ .Values.overrides.SPRING_PROFILES_ACTIVE | default "localdocker" | quote }}
+  ACCR_JWT_USER_IDENTIFIER_ENTRY_NAME: {{ .Values.overrides.ACCR_JWT_USER_IDENTIFIER_ENTRY_NAME | default "preferred_username" | quote }}
+  ACCR_ID_PROVIDER_TOKEN_PATH: {{ .Values.overrides.ACCR_ID_PROVIDER_TOKEN_PATH | default "auth/realms/{realm}/protocol/openid-connect/token/introspect" | quote }}
+  AGENT_API_KEY_HEADER_NAME: {{ .Values.overrides.AGENT_API_KEY_HEADER_NAME | default "X-API-Key"  | quote }}
+  ACCR_API_KEY_HEADER_NAME: {{ .Values.overrides.ACCR_API_KEY_HEADER_NAME | default "X-API-Key" | quote }}
+  ACCR_INFO_CONTACT_EMAIL: {{ .Values.info.contactEmail | default "" | quote }}
+  ACCR_INFO_CONTACT_NAME: {{ .Values.info.contactName | default "" | quote }}
+  ACCR_INFO_CONTACT_URL: {{ .Values.info.contactURL | default "" | quote }}
+  ACCR_INFO_DESCRIPTION: {{ .Values.info.description | default "" | quote }}
+  ACCR_INFO_TITLE: {{ .Values.info.title | default "Accreditation Controller" | quote }}
+  ACCR_CONTROLLER_PORT: {{ .Values.service.port | default "8080" | quote }}
+  ACCR_MONGODB_PORT: {{ .Values.overrides.ACCR_MONGODB_PORT | default "27017" | quote }}
+  ACCR_MONGODB_DB_NAME: {{ .Values.mongodb.auth.database }}
+  ACCR_MONGODB_HOST: {{ .Values.mongodb.host | default (printf "%s-mongodb" .Release.Name)  | quote }}
+  ACCR_MONGODB_USERNAME: {{ .Values.mongodb.auth.rootUser }}
+  ACCR_MONGODB_AUTH_DB_NAME: {{ .Values.mongodb.auth.authDatabase | default .Values.mongodb.auth.database | quote }}
+  ACCR_I18N_PATH: {{ .Values.ui.i18nPath | default "/app/resources/i18n/ui" | quote }}

@@ -1,0 +1,15 @@
+{{- if .Values.initScript.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-init-script
+data:
+  {{- if .Values.initScript.script }}
+  init-script.sh: {{ .Values.initScript.script | toJson }}
+  {{- else if  .Values.initScript.scriptFile }}
+  init-script.sh: {{ .Files.Get .Values.initScript.scriptFile | toJson }}
+  {{- else }}
+  init-script.sh: |
+    echo "Initialized without provided script";
+  {{- end }}
+{{- end }}

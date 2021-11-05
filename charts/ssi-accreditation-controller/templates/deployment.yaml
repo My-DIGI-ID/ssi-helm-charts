@@ -1,0 +1,132 @@
+{{- $fullName := include "ssi-accreditation-controller.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ssi-accreditation-controller.fullname" . }}
+  labels:
+    {{- include "ssi-accreditation-controller.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ssi-accreditation-controller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ssi-accreditation-controller.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ssi-accreditation-controller.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: {{ .Values.service.port }}-tcp
+              containerPort: {{ .Values.service.port }} 
+              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom: 
+            - configMapRef:
+                name: {{ $fullName }}-config
+            - secretRef:
+                name: {{ $fullName }}-secret 
+          env:
+            - name: ACCR_AGENT_API_URL
+              value: {{ .Values.agent.url }} 
+            - name: ACCR_ID_PROVIDER_HOST
+              value: {{ .Values.keycloak.host }} 
+            - name: ACCR_ID_PROVIDER_PORT
+              value: {{ .Values.keycloak.port | default "8080" | quote }} 
+            - name: ACCR_ID_PROVIDER_REALM
+              value: {{ .Values.keycloak.realm }} 
+            - name: ACCR_ID_PROVIDER_ACCR_CLIENT_ID
+              value: {{ .Values.keycloak.clientID }}
+            - name: ACCR_ID_PROVIDER_SSL_TRUST_ALL
+              value: {{ .Values.keycloak.sslTrustAll | default "true" | quote }}
+            - name: ACCR_ID_PROVIDER_VERIFY_HOSTNAME
+              value: {{ .Values.keycloak.verifyHostname | default "false" | quote }}
+            - name: ACCR_MONGODB_SSL_ENABLED
+              value: {{ .Values.dbssl.enabled | default "false" | quote }} 
+            - name: ACCR_MONGODB_SSL_INVALID_HOSTNAME_ALLOWED
+              value: {{ .Values.dbssl.invalidHostAllowed | default "true" | quote }}
+            - name: ACCR_ALLOWED_ORIGIN_HOST_A
+              value: {{ .Values.cors.hostA | default "" | quote }} 
+            - name: ACCR_ALLOWED_ORIGIN_HOST_B
+              value: {{ .Values.cors.hostB | default "" | quote }} 
+            - name: ACCR_ALLOWED_ORIGIN_HOST_C
+              value: {{ .Values.cors.hostC | default "" | quote }} 
+            - name: ACCR_EMAIL_GUEST_INVITATION_REDIRECT
+              value: {{ .Values.guest.invitationRedirect | default (printf "http://%s:8080/guest/welcome/{id}" $fullName) | quote }}
+            - name: ACCR_GUEST_TOKEN_LIFETIME_MS
+              value: {{ .Values.guest.lifetimeMS | default "300000" | quote}} 
+            - name: GUEST_CREDENTIAL_NAME
+              value: {{ .Values.guest.name }}
+            - name: GUEST_CREDENTIAL_DEFINITION
+              value: {{ .Values.guest.definition }}
+            - name: GUEST_CREDENTIAL_SCHEMA
+              value: {{ .Values.guest.schema | default "" | quote }}
+            - name: ACCR_GUEST_BASIS_ID_FUZZY_LIMIT
+              value: {{ .Values.guest.fuzzyLimit | default "5" | quote }}
+            - name: ACCR_GUEST_CONNECTION_QR_SIZE
+              value: {{ .Values.guest.qrSize | default "300" | quote }}
+            - name: ACCR_BASIS_ID_VERIFICATION_DEV_MODE
+              value: {{ .Values.basisid.devModeEnabled | default "false" | quote }}
+            - name: BDR_BASIS_ID_CREDENTIAL_NAME
+              value: {{ .Values.basisid.name | default "" | quote }}
+            - name: BDR_BASIS_ID_CREDENTIAL_DEFINITION
+              value: {{ .Values.basisid.definition | default "" | quote }}
+            - name: BDR_BASIS_ID_SCHEMA
+              value: {{ .Values.basisid.schema | default "" | quote }}
+            - name: ACCR_FUZZY_LD_THRESHOLD
+              value: {{ .Values.basisid.fuzzyThreshold | default "50" | quote }}
+            - name: EMPLOYEE_CREDENTIAL_NAME
+              value: {{ .Values.employee.name | default "" | quote }}
+            - name: EMPLOYEE_CREDENTIAL_DEFINITION
+              value: {{ .Values.employee.definition | default "" | quote }}
+            - name: EMPLOYEE_CREDENTIAL_SCHEMA
+              value: {{ .Values.employee.schema | default "" | quote }}
+            - name: ACCR_EMPLOYEE_CONNECTION_QR_SIZE
+              value: {{ .Values.employee.qrSize | default "300" | quote }}
+            - name: ACCR_SWAGGER_UI_ID_PROVIDER_HOST
+              value: {{ .Values.swagger.host | default "https://localhost{port}/{path}/" | quote }}
+            - name: ACCR_CONTROLLER_SSL_ENABLED
+              value: {{ .Values.ssl.enabled | default "false" | quote }}
+            {{- include "helpers.list-env-variables" . | indent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

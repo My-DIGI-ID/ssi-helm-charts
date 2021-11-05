@@ -1,0 +1,229 @@
+# Default values for ssi-accreditation-controller.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/my-digi-id/ssi-acmgt-accreditation-controller
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.2.0"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  hosts:
+    - host: ssi-accreditation-controller
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - ssi-accreditation-controller
+    secretName: tls-secret
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+dbssl:
+  enabled: false
+  ## If keystore is set to true these must be set or an error will occur
+  ## They are used to set any mongo db certificate reference
+  sslKeyStore: ""
+  sslKeyStorePassword: ""
+  sslTrustStore: ""
+  sslTrustStorePassword: ""
+  invalidHostAllowed: true
+
+keycloak:
+  ## Should be modified to the correct public route to the keycloak provider
+  ## {port} is optional depending on set-up
+  ## {path} is mandatory
+  host: http://accreditation-keycloak{port}/{path}
+  ## Port 8080 is the internal http port but this could be different depending on where
+  ## keycloak has been deployed (e.g. on a https 443 port)
+  port: "8080" 
+  realm: ssi-am-accreditation
+  clientSecret: SECRET
+  clientID: accreditation-controller 
+  sslTrustAll: true
+  verifyHostname: false
+
+agent:
+  APIKey: APIKEY
+  webHookAPIKey: AGENTAPIKEY
+  url: http://accreditation-agent
+  port: "11080"
+
+info:
+  contactEmail: ""
+  contactName: ""
+  contactURL: ""
+  description: ""
+  title: "Accreditation Controller"
+
+ui:
+  ## HOST and PORT should be modified to public route
+  ## This is used for the redirection and will be a consumer accessible route
+  host:	http://accreditation-ui
+  port: 4200
+  ## Defaults to /app/ui/ - Only change if location has been modified in image build
+  i18nPath: 
+
+cors:
+  hostA: http://accreditation-ui:4200
+  hostB: ""
+  hostC: ""
+
+guest: 
+  ## Should be modified to the correct public route
+  invitationRedirect: http://accreditation-controller/guest/welcome/{id} # Derived
+  lifetimeMS: "3000000" 
+  ## Enter correct values for the defnition
+  name: PUTVALUEHERE
+  definition: PUTVALUEHERE
+  schema: ""
+  qrSize: 300
+  fuzzyLimit: "5"
+
+basisid:
+  devModeEnabled: false
+  ## Enter the correct values for the creditional definition
+  name: PUTVALUEHERE
+  definition: PUTVALUEHERE
+  schema: ""
+  fuzzyThreshold: "50"
+
+employee:
+  name: ""
+  definition: ""
+  schema: ""
+  qrSize: 300
+
+swagger:
+  host: 
+
+ssl:
+  enabled: false
+  sslKeyStore: ""
+  sslKeyStorePassword: ""
+  sslKeyStoreType: ""
+  sslKeyAlias: ""
+
+apiKey: APIKEY
+
+overrides: {}
+
+env: {}
+
+initScript:
+  enabled: false
+  # script: |
+  # First lines should be:
+  #  #! /bin/bash
+  # set -a
+  # source /tmp/.envrc
+  #   echo "Initialized with script from values";
+  #   echo "WEBHOOK_URL: $WEBHOOK_URL";
+  scriptFile: accreditation_init_script.sh
+  env:
+    AGENT_KEY:
+  # Define which values should be passed as an environment variable
+  envValues: 
+    EMPLOYEE_CREDENTIAL_SCHEMA: employee.schema
+    EMPLOYEE_CREDENTIAL_NAME: employee.name
+    GUEST_CREDENTIAL_SCHEMA: guest.schema
+    GUEST_CREDENTIAL_NAME: guest.name
+    AGENT_API_KEY: agent.APIKey
+
+mongodb:
+  ## If false values must be set to a hosted
+  ## MongoDB installation.  
+  ## If false ACCR_MONGODB_HOST MUST BE SET in the env section
+  enabled: true
+  host: 
+  image:
+    tag: 4.2.16-debian-10-r3
+  ## Auth values are MANDATORY for installation
+  auth:
+    rootUser: root
+    rootPassword: PASSWORD
+    username: mongouser
+    password: PASSWORD
+    database: admin
+    authDatabase: admin
+  ## Only relevant when dependancy is installed via helm
+  persistence:
+    storageClass: STORAGECLASS
+    size: 10Gi
+
+  ## MongoDB architecture (`standalone` or `replicaset`)
+  architecture: standalone
+
+  ## Enable MongoDB pod(s) Security Context
+  podSecurityContext:
+   enabled: false
+
+  ## Enable MongoDB container(s) Security Context
+  containerSecurityContext:
+    enabled: false
+
+  volumePermissions:
+    enabled: false
+    securityContext:
+      runAsUser: "auto"

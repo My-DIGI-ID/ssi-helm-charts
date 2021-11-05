@@ -1,0 +1,52 @@
+{{- if .Values.initScript.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-init-job"
+  labels:
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    metadata:
+      name: "{{ .Release.Name }}-init-job"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: initialize
+        ## Acapy image has all the key libraries
+        image: ghcr.io/my-digi-id/ssi-aca-py:1.0.0
+        #image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        env:
+        {{- range $key, $val := .Values.initScript.env }}
+        - name: {{ $key }}
+          value: {{ $val | quote }}
+        {{- end }}
+        {{- range $key, $val := .Values.initScript.envValues }}
+        - name: {{ $key }}
+          value: "{{ template "getOrDefault" (dict "Values" $.Values "Path" $val "Default" "")  }}"
+        {{- end }}
+        volumeMounts:
+        - name: init-script
+          mountPath: /home/indy/init-script.sh
+          subPath: init-script.sh
+        command: 
+        - bash 
+        - -c 
+        - /home/indy/init-script.sh
+      volumes:
+        - name: init-script
+          configMap:
+            name: {{ .Release.Name }}-init-script
+            defaultMode: 0777
+{{- end }}
