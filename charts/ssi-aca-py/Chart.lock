@@ -4,6 +4,6 @@ dependencies:
   version: 10.10.1
 - name: ssi-tails-server
   repository: https://my-digi-id.github.io/ssi-helm-charts/
-  version: 0.1.4
-digest: sha256:bc1bebc72dac9fa8bdc255878018f7a99e4ea2fe26990ce9bc94ebd8b950afd9
-generated: "2021-11-05T18:43:00.605428769+01:00"
+  version: 0.1.5
+digest: sha256:2be0b1f96fd35af6d252816065cd2d0789bd1ca0acf07b15ed6bc4d31a88cc80
+generated: "2021-11-05T18:58:41.458453897+01:00"
