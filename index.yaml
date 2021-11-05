@@ -162,6 +162,16 @@ entries:
   ssi-tails-server:
   - apiVersion: v2
     appVersion: 1.1.0
+    created: "2021-11-05T17:42:07.699320189Z"
+    description: A Helm chart for Kubernetes
+    digest: 1d252ff1b3752c73a1b6758637d92b1e442ea5790b9137c518f3a7115ad6cec0
+    name: ssi-tails-server
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-tails-server-0.1.4/ssi-tails-server-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 1.1.0
     created: "2021-10-21T06:55:33.002563974Z"
     description: A Helm chart for Kubernetes
     digest: c11e5ee2721e48e4b93f95b83da975dae865bd1e2556f00caa2df63dc47f01de
@@ -217,4 +227,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-11-05T17:29:07.039911922Z"
+generated: "2021-11-05T17:42:07.699341189Z"
