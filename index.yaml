@@ -269,6 +269,16 @@ entries:
   ssi-verification-ui:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-11-05T18:38:58.478338959Z"
+    description: A Helm chart for Kubernetes
+    digest: ef316ace75194d5e5c2e36d95d7ffe739fac8348d7f5eb2836183b458319302f
+    name: ssi-verification-ui
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.3/ssi-verification-ui-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-11-05T16:28:20.851494611Z"
     description: A Helm chart for Kubernetes
     digest: 365f58dc0eaebc60b5f2595f0d5c934db75183efaba1bbb75bb939448de3d65f
@@ -277,4 +287,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-11-05T17:59:59.132364197Z"
+generated: "2021-11-05T18:38:58.478371848Z"
