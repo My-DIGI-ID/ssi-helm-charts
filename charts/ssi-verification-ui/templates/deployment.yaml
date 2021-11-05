@@ -60,7 +60,7 @@ spec:
             - name: KEYCLOAK_URL
               value: {{ .Values.keycloak.url | default (printf "http://%s-keycloak:8080" .Release.Name) | quote }}
             - name: QR_CODE_BASE_URL
-              value: {{ .Values.keycloak.qrBaseURL | default (printf "http://%s-ssi-verification-controller:8080/api/v2" .Release.Name) | quote }}
+              value: {{ .Values.verification.qrBaseURL | default (printf "http://%s-ssi-verification-controller:8080/api/v2" .Release.Name) | quote }}
             {{- include "helpers.list-env-variables" . | indent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
