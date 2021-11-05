@@ -41,6 +41,33 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-aca-py-0.1.0/ssi-aca-py-0.1.0.tgz
     version: 0.1.0
+  ssi-accreditation-controller:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-11-05T16:31:10.680516376Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.26.4
+    description: A Helm chart for Kubernetes
+    digest: 9f143696f6b2acdb748e2e1ee03022d8d987149b322ec372cfef59b8aa0e8798
+    name: ssi-accreditation-controller
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-accreditation-controller-0.1.1/ssi-accreditation-controller-0.1.1.tgz
+    version: 0.1.1
+  ssi-accreditation-ui:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-11-05T16:31:10.900431222Z"
+    description: A Helm chart for Kubernetes
+    digest: 1e54251da4aa75992e7e37946021040c34cc3f2f5a6e5b4a8420665357ebde10
+    name: ssi-accreditation-ui
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-accreditation-ui-0.1.2/ssi-accreditation-ui-0.1.2.tgz
+    version: 0.1.2
   ssi-network-monitor:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -130,4 +157,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-11-05T16:28:20.85155692Z"
+generated: "2021-11-05T16:31:10.900453622Z"
