@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ssi-verification-ui.fullname" . }}
+  labels:
+    {{- include "ssi-verification-ui.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ssi-verification-ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ssi-verification-ui.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ssi-verification-ui.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: {{ .Values.service.port }}-tcp
+              containerPort: {{ .Values.service.port }} 
+              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: VERIFICATION_CONTROLLER_BASE_URL
+              value: {{ .Values.verification.url | default (printf "http://%s-ssi-verification-controller:8080/api/v2" .Release.Name) | quote }} 
+            - name: KEYCLOAK_CLIENT_ID
+              value: {{ .Values.keycloak.clientID | default "verification-ui" | quote }}
+            - name: KEYCLOAK_REALM
+              value: {{ .Values.keycloak.realm | default "ssi-am-verification" | quote }}
+            - name: KEYCLOAK_URL
+              value: {{ .Values.keycloak.url | default (printf "http://%s-keycloak:8080" .Release.Name) | quote }}
+            - name: QR_CODE_BASE_URL
+              value: {{ .Values.keycloak.qrBaseURL | default (printf "http://%s-ssi-verification-controller:8080/api/v2" .Release.Name) | quote }}
+            {{- include "helpers.list-env-variables" . | indent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

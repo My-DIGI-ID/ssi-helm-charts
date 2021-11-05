@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ssi-verification-ui.fullname" . }}
+  labels:
+    {{- include "ssi-verification-ui.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }} 
+      protocol: TCP
+      name: {{ .Values.service.port }}-tcp 
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: 80-tcp
+  selector:
+    {{- include "ssi-verification-ui.selectorLabels" . | nindent 4 }}
