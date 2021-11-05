@@ -1,0 +1,136 @@
+{{- $fullName := include "ssi-verification-controller.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ssi-verification-controller.fullname" . }}
+  labels:
+    {{- include "ssi-verification-controller.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ssi-verification-controller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ssi-verification-controller.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ssi-verification-controller.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: {{ .Values.service.port }}-tcp
+              containerPort: {{ .Values.service.port }} 
+              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom: 
+            - configMapRef:
+                name: {{ $fullName }}-config
+            - secretRef:
+                name: {{ $fullName }}-secret 
+          env:
+            - name: VERI_AGENT_API_URL
+              value: {{ .Values.agent.url }} 
+            - name: VERI_ID_PROVIDER_HOST
+              value: {{ .Values.keycloak.host }} 
+            - name: VERI_ID_PROVIDER_PORT
+              value: {{ .Values.keycloak.port | default "8080" | quote }} 
+            - name: VERI_ID_PROVIDER_REALM
+              value: {{ .Values.keycloak.realm }} 
+            - name: VERI_ID_PROVIDER_VERI_CLIENT_ID
+              value: {{ .Values.keycloak.clientID }} 
+            - name: VERI_MONGODB_SSL_INVALID_HOSTNAME_ALLOWED
+              value: {{ .Values.dbssl.invalidHostAllowed | default "true" | quote }}
+            - name: VERI_MONGODB_SSL_ENABLED
+              value: {{ .Values.dbssl.enabled | default "false" | quote }}
+            - name: VERI_ALLOWED_ORIGIN_HOST_A
+              value: {{ .Values.cors.hostA | default "" | quote }} 
+            - name: VERI_ALLOWED_ORIGIN_HOST_B
+              value: {{ .Values.cors.hostB | default "" | quote }} 
+            - name: VERI_ALLOWED_ORIGIN_HOST_C
+              value: {{ .Values.cors.hostC | default "" | quote }} 
+            - name: VERI_AGENT_ENDPOINT
+              value: {{ .Values.agent.endpoint | default "http://0.0.0.0:11000" | quote }}
+            - name: VERI_BASIS_ID_VERIFICATION_DEV_MODE
+              value: {{ .Values.basisid.devModeEnabled | default "false" | quote }}
+            - name: BDR_BASIS_ID_CREDENTIAL_NAME
+              value: {{ .Values.basisid.name | default "" | quote }}
+            - name: BDR_BASIS_ID_CREDENTIAL_DEFINITION
+              value: {{ .Values.basisid.definition | default "" | quote }}
+            - name: BDR_BASIS_ID_SCHEMA
+              value: {{ .Values.basisid.schema | default "" | quote }}
+            - name: EMPLOYEE_CREDENTIAL_NAME
+              value: {{ .Values.employee.name | default "" | quote }}
+            - name: EMPLOYEE_CREDENTIAL_DEFINITION
+              value: {{ .Values.employee.definition | default "" | quote }}
+            - name: EMPLOYEE_CREDENTIAL_SCHEMA
+              value: {{ .Values.employee.schema | default "" | quote }}
+            - name: GUEST_CREDENTIAL_NAME
+              value: {{ .Values.guest.name }}
+            - name: GUEST_CREDENTIAL_DEFINITION
+              value: {{ .Values.guest.definition }}
+            - name: GUEST_CREDENTIAL_SCHEMA
+              value: {{ .Values.guest.schema | default "" | quote }}
+            - name: VERI_EMAIL_GUEST_INVITATION_REDIRECT
+              value: {{ .Values.guest.invitationRedirect | default (printf "http://%s:8080/guest/invitation/redirect?id={id}"  $fullName) | quote }}
+            - name: ACCR_API_URL
+              value: {{ .Values.accreditation.url | default "" | quote }}
+            - name: VERI_ACCR_API_SSL_VERIFY_HOSTNAME
+              value: {{ .Values.accreditation.verifyHostname | default "false" | quote }}
+            - name: VERI_ACCR_API_SSL_TRUST_ALL
+              value: {{ .Values.accreditation.sslTrustAll | default "true" | quote }}
+            - name: VERI_ID_PROVIDER_SSL_TRUST_ALL
+              value: {{ .Values.keycloak.trustAll | default "true" | quote }}
+            - name: VERI_ID_PROVIDER_VERIFY_HOSTNAME
+              value: {{ .Values.keycloak.verifyHostname | default "false" | quote }}
+            - name: VERI_EMAIL_SMTP_HOST
+              value: {{ .Values.email.host | default "" | quote }}
+            - name: VERI_EMAIL_SMTP_PORT
+              value: {{ .Values.email.port | default "" | quote }}
+            - name: VERI_EMAIL_SENDER
+              value: {{ .Values.email.sender | default "" | quote }}
+            - name: VERI_SWAGGER_UI_ID_PROVIDER_HOST
+              value: {{ .Values.swagger.host | default "https://localhost{port}/{path}/" | quote }}
+            - name: VERI_CONTROLLER_SSL_ENABLED
+              value: {{ .Values.ssl.enabled | default "false" | quote }}
+            {{- include "helpers.list-env-variables" . | indent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

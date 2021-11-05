@@ -1,0 +1,205 @@
+# Default values for ssi-verification-controller.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/my-digi-id/ssi-acmgt-verification-controller
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.2.0"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  hosts:
+    - host: verification-controller
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - verification-controller
+    secretName: tls-secret
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+dbssl:
+  enabled: false
+  sslkeyStore: ""
+  sslKeyStorePassword: ""
+  sslTrustStore: ""
+  sslTrustStorePassword: ""
+  invalidHostAllowed: true
+
+agent:
+  verkey: VERKEY
+  webHookAPIKey: APIKEY
+  APIKey: APIKEY
+  ariesAttachID: libindy-request-presentation-0
+  ariesType: ARIESMESSAGETYPE
+  didcommURL: DIDCOMMURL
+  url: ""
+  port: "11080"
+  endpoint: http://0.0.0.0:11000
+
+keycloak:
+  clientSecret: CLIENTSECRET
+  host: http://veri-keycloak:{port}/{path}
+  port: 8080
+  realm: ssi-am-verification
+  clientID: verification-controller
+  trustAll: true
+  verifyHostname: false
+
+ui:
+  host: http://verification-ui
+  port: 4300
+  i18nPath:
+
+info:
+  title: Verification Controller
+  contactEmail: ""
+  contactName: ""
+  contactURL: ""
+  description: ""
+
+cors:
+  hostA: http://accreditation-ui:4300
+  hostB: ""
+  hostC: ""
+
+employee:
+  name: ""
+  definition: ""
+  schema: ""
+
+basisid:
+  devModeEnabled: false
+  name: ""
+  definition: ""
+  schema: ""
+
+guest:
+  name: ""
+  definition: ""
+  schema: ""
+  invitationRedirect:	http://verification-controller:8080/guest/invitation/redirect?id={id}
+  #checkoutDelay:	120
+
+accreditation:
+  webHookAPIKey: APIKEY
+  url: http://accreditation-controller:8080
+  sslTrustAll: true
+  verifyHostname: false
+  apiKey: APIKEY
+
+email:
+  host: ""
+  port: ""
+  sender: ""
+
+swagger:
+  host: 
+
+ssl:
+  enabled: false
+  sslKeyStore: ""
+  sslKeyStorePassword: ""
+  sslKeyStoreType: ""
+  sslKeyAlias: ""
+
+overrides: {}
+
+env: {}
+
+mongodb:
+  ## If false values must be set to a hosted
+  ## MongoDB installation.  
+  ## If false VERI_MONGODB_HOST MUST BE SET in the env section
+  enabled: true
+  host:
+  image:
+    tag: 4.2.16-debian-10-r3
+  auth:
+    rootUser: root
+    rootPassword: PASSWORD
+    username: mongouser
+    password: PASSWORD
+    database: admin
+    authDatabase: admin
+  persistence:
+    storageClass: STORAGECLASS
+    size: 10Gi
+
+  ## MongoDB architecture (`standalone` or `replicaset`)
+  architecture: standalone
+
+  ## Enable MongoDB pod(s) Security Context
+  podSecurityContext:
+   enabled: false
+
+  ## Enable MongoDB container(s) Security Context
+  containerSecurityContext:
+    enabled: false
+
+  volumePermissions:
+    enabled: false
+    securityContext:
+      runAsUser: "auto"
