@@ -3,7 +3,7 @@ dependencies:
   repository: https://charts.bitnami.com/bitnami
   version: 10.10.1
 - name: ssi-tails-server
-  repository: https://chart-ssi-chartmuseum.bkamt-test-f9ec07aa8707c235e122cc792282dee3-0000.eu-de.containers.appdomain.cloud/
+  repository: https://my-digi-id.github.io/ssi-helm-charts/
   version: 0.1.2
-digest: sha256:dd9b3b3836d973ad4710c7f9232855e9b9c09f7bc2d9ef13fa284df324eb10cb
-generated: "2021-10-20T17:13:18.993093+01:00"
+digest: sha256:62c71456a6a5234b66bdc023d57cc9e05ded49e88773dfab7aa87f85bdaf38f2
+generated: "2021-11-05T17:21:31.720867994+01:00"
