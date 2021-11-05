@@ -26,6 +26,8 @@ spec:
       - name: initialize
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         env:
+        - name: AGENT_URL
+          value: "http://{{ include "ssi-aca-py.fullname" . }}:11080"
         {{- range $key, $val := .Values.initScript.env }}
         - name: {{ $key }}
           value: {{ $val | quote }}
@@ -39,9 +41,9 @@ spec:
           mountPath: /home/indy/init-script.sh
           subPath: init-script.sh
         command: 
-        - bash
+        - bash 
         - -c 
-        - ./init-script.sh
+        - /home/indy/init-script.sh
       volumes:
         - name: init-script
           configMap:
