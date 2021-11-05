@@ -3,6 +3,26 @@ entries:
   ssi-aca-py:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-11-05T16:23:15.2293489Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.10.1
+    - condition: isIssuer
+      name: ssi-tails-server
+      repository: https://my-digi-id.github.io/ssi-helm-charts/
+      version: 0.1.2
+    description: A Helm chart for Kubernetes
+    digest: 59dd606cb197599efedab787f4571b7678c30b2fc7a6d0664d66648599472566
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Smiley.jpg/261px-A_Smiley.jpg
+    name: ssi-aca-py
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-aca-py-0.2.0/ssi-aca-py-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-10-22T09:12:39.772117757Z"
     dependencies:
     - condition: postgresql.enabled
@@ -83,4 +103,20 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-tails-server-0.1.0/ssi-tails-server-0.1.0.tgz
     version: 0.1.0
-generated: "2021-10-22T09:12:39.772135158Z"
+  ssi-verification-controller:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-11-05T16:23:15.443473934Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.26.4
+    description: A Helm chart for Kubernetes
+    digest: 63518ae6df4b1c8ddb1b1134a8634c0983d069f5943fb0a5a8d9c1d40b5a46dd
+    name: ssi-verification-controller
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-controller-0.1.2/ssi-verification-controller-0.1.2.tgz
+    version: 0.1.2
+generated: "2021-11-05T16:23:15.443492134Z"
