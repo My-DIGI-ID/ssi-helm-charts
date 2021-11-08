@@ -15,75 +15,63 @@ spec:
         app: monitor-{{ .Release.Name }}
     spec:
       containers:
-      - name: nginx
-        image: ghcr.io/my-digi-id/ssi-indy-network-monitor-api:1.0.3
-        imagePullPolicy: Always
-        volumeMounts:
-          - name: monitor-volume
-            mountPath: /usr/share/nginx/html
-        readinessProbe:
-          failureThreshold: 4
-          httpGet:
-            path: /metrics
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: {{ .Values.intervalSeconds }}
-          periodSeconds: 5
-          timeoutSeconds: 1
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /metrics
-            port: 8080
-            scheme: HTTP
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 1
-        ports:
-        - containerPort: 8080
-      - name: transform
-        image: ghcr.io/my-digi-id/ssi-indy-network-monitor-transformer:1.0.7
-        imagePullPolicy: Always
-        volumeMounts:
-          - name: monitor-volume
-            mountPath: /app/network
-        env:
-          - name: INPUT_FILE_NAME
-            value: network/network.json
-          - name: OUTPUT_METRICS_FILE_NAME
-            value: network/metrics
-          - name: OUTPUT_FILE_NAME
-            value: network/network_aggregated.json
-          - name: INTERVAL_SECONDS
-            value: {{ .Values.intervalSeconds | quote }}
-          - name: NETWORK_NAME
-            value: {{ .Values.networkName | quote }}
-        ports:
-        - containerPort: 8080
-      - name: monitor
-        image:  ghcr.io/my-digi-id/ssi-indy-network-monitor:1.0.1
-        command:
-          - bash
-          - -c
-          - >
-            while true; do 
-            python fetch_status.py --genesis-url=$GENESIS_URL --seed=$SEED 
-            | jq '.[] |=del(.response.result.data.Node_info.View_change_status.IC_queue)' 
-            | jq -c '.' 
-            | tee monitoring/network_new.json; 
-            cp monitoring/network_new.json monitoring/network.json;
-            sleep $TIMEOUT; 
-            done
-        env:
-          - name: GENESIS_URL
-            value: {{ .Values.genesisUrl }}
-          - name: SEED
-            value: {{ .Values.seed }}
-          - name: TIMEOUT
-            value: {{ .Values.intervalSeconds | quote}}
-        volumeMounts:
-        - name: monitor-volume
-          mountPath: /home/indy/monitoring
+        - name: nginx
+          image: ghcr.io/my-digi-id/ssi-indy-network-monitor-api:1.0.3
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: monitor-volume
+              mountPath: /usr/share/nginx/html
+          readinessProbe:
+            failureThreshold: 4
+            httpGet:
+              path: /metrics
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.intervalSeconds }}
+            periodSeconds: 5
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          ports:
+            - containerPort: 8080
+        - name: transform
+          image: ghcr.io/my-digi-id/ssi-indy-network-monitor-transformer:1.0.8
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: monitor-volume
+              mountPath: /app/network
+          env:
+            - name: INPUT_FILE_NAME
+              value: network/network.json
+            - name: OUTPUT_METRICS_FILE_NAME
+              value: network/metrics
+            - name: OUTPUT_FILE_NAME
+              value: network/network_aggregated.json
+            - name: INTERVAL_SECONDS
+              value: {{ .Values.intervalSeconds | quote }}
+            - name: NETWORK_NAME
+              value: {{ .Values.networkName | quote }}
+          ports:
+            - containerPort: 8080
+        - name: monitor
+          image: ghcr.io/my-digi-id/ssi-indy-network-monitor:1.0.2
+          env:
+            - name: GENESIS_URL
+              value: {{ .Values.genesisUrl }}
+            - name: SEED
+              value: {{ .Values.seed }}
+            - name: TIMEOUT
+              value: {{ .Values.intervalSeconds | quote }}
+          volumeMounts:
+            - name: monitor-volume
+              mountPath: /home/indy/monitoring
       volumes:
-      - name: monitor-volume
-        emptyDir: {}
+        - name: monitor-volume
+          emptyDir: {}
