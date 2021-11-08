@@ -3,6 +3,26 @@ entries:
   ssi-aca-py:
   - apiVersion: v2
     appVersion: 1.16.1
+    created: "2021-11-08T09:40:57.773520997Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.10.1
+    - condition: isIssuer
+      name: ssi-tails-server
+      repository: https://my-digi-id.github.io/ssi-helm-charts/
+      version: 0.1.5
+    description: Aries Cloud Agent
+    digest: dca410cc62f7f39acc998393f2cbf3d611b5b1bcddd07f1659d5dcc9e2fedb99
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Smiley.jpg/261px-A_Smiley.jpg
+    name: ssi-aca-py
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-aca-py-0.2.7/ssi-aca-py-0.2.7.tgz
+    version: 0.2.7
+  - apiVersion: v2
+    appVersion: 1.16.1
     created: "2021-11-05T17:59:59.132312996Z"
     dependencies:
     - condition: postgresql.enabled
@@ -171,6 +191,16 @@ entries:
   ssi-network-monitor:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-11-08T09:40:57.946668709Z"
+    description: A monitoring Source hayperledger indy networks
+    digest: 0b2a127c708679a3dba87fd2282948c2e4744558342b9bce40f848c12189e0da
+    name: ssi-network-monitor
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-network-monitor-0.3.1/ssi-network-monitor-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-09-29T14:57:46.217808261Z"
     description: A monitoring Source hayperledger indy networks
     digest: 9c8d44516fe57675785ee031d5e4b02102d22eb2a492db1a504db969fe00f721
@@ -287,4 +317,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-11-05T18:38:58.478371848Z"
+generated: "2021-11-08T09:40:57.946983513Z"
