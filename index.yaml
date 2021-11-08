@@ -191,6 +191,16 @@ entries:
   ssi-network-monitor:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-11-08T12:10:50.083325894Z"
+    description: A monitoring Source hayperledger indy networks
+    digest: 455b327335e7e6d3bf4b795b59a4d678b7bee3c5bf96ebe8bd6b3546a8723775
+    name: ssi-network-monitor
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-network-monitor-0.3.2/ssi-network-monitor-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-11-08T09:40:57.946668709Z"
     description: A monitoring Source hayperledger indy networks
     digest: 0b2a127c708679a3dba87fd2282948c2e4744558342b9bce40f848c12189e0da
@@ -317,4 +327,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-11-08T09:40:57.946983513Z"
+generated: "2021-11-08T12:10:50.083556096Z"
