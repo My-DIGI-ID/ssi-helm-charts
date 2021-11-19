@@ -164,6 +164,21 @@ entries:
   ssi-accreditation-controller:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-11-19T13:49:37.305807406Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.26.4
+    description: A Helm chart for Kubernetes
+    digest: c28574357cf0669cb5daa75615a1dc60f55975b76da9ec6b9bc8e8bcdba1095c
+    name: ssi-accreditation-controller
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-accreditation-controller-0.1.2/ssi-accreditation-controller-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-11-05T16:31:10.680516376Z"
     dependencies:
     - condition: mongodb.enabled
@@ -327,4 +342,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-11-08T12:10:50.083556096Z"
+generated: "2021-11-19T13:49:37.305877807Z"
