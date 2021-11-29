@@ -21,6 +21,8 @@ schemaId:
 credentialName: 
 seed: 
 
+endpointOverride:
+
 webhook:
   url:
   apikey: 

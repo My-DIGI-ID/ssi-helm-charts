@@ -53,10 +53,14 @@ spec:
           - name: ACAPY_LABEL
             value: {{ .Values.agentName }}
           - name: ACAPY_ENDPOINT
+          {{- if .Values.endpointOverride }}
+            value: {{ .Values.endpointOverride }}
+          {{- else }}
           {{- if .Values.ingress.enabled }}
             value: {{ if .Values.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.ingress.subdomainPrefix}}indy.{{ .Values.ingress.host }}
           {{- else }}
             value: http://{{ include "ssi-aca-py.fullname" . }}:11000
+          {{- end }}
           {{- end }}
           - name: ACAPY_ADMIN
             value: "0.0.0.0 11080"
