@@ -3,6 +3,26 @@ entries:
   ssi-aca-py:
   - apiVersion: v2
     appVersion: 1.16.1
+    created: "2021-11-29T12:41:58.383083502Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.10.1
+    - condition: isIssuer
+      name: ssi-tails-server
+      repository: https://my-digi-id.github.io/ssi-helm-charts/
+      version: 0.1.5
+    description: Aries Cloud Agent
+    digest: befe81ee7ff7f0388fb01ddd1d732d7c15c9ae28962436b77d5a6d29341aebb5
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Smiley.jpg/261px-A_Smiley.jpg
+    name: ssi-aca-py
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-aca-py-0.2.9/ssi-aca-py-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
+    appVersion: 1.16.1
     created: "2021-11-24T08:59:05.371083683Z"
     dependencies:
     - condition: postgresql.enabled
@@ -397,4 +417,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-11-24T08:59:05.371267499Z"
+generated: "2021-11-29T12:41:58.383155403Z"
