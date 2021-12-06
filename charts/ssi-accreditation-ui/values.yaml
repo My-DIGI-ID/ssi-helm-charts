@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/my-digi-id/ssi-acmgt-ssi-accreditation-ui
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.2.1"
+  tag: "1.2.2"
 
 nameOverride: ""
 fullnameOverride: ""
