@@ -28,6 +28,30 @@ spec:
       serviceAccountName: {{ include "ssi-accreditation-controller.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: wait-for-mongo
+        image: curlimages/curl
+        env:  
+        - name: MONGODB_URL
+          {{- if  .Values.mongodb.host }}
+          value: {{.Values.mongodb.host}}:{{ .Values.overrides.ACCR_MONGODB_PORT | default "27017" }}
+          {{- else }}
+          value: {{.Release.Name}}-mongodb:{{ .Values.overrides.ACCR_MONGODB_PORT | default "27017" }}
+          {{- end }}
+        command:
+          - sh
+          - -c
+          - until $(curl --fail -si --output /dev/null $MONGODB_URL); do sleep 5; done;
+
+      - name: wait-for-agent
+        image: curlimages/curl
+        env:
+        - name: AGENT_URL
+          value: {{ .Values.agent.url }}:{{ .Values.agent.port | default "11000" }}
+        command:
+          - sh
+          - -c
+          - until $(curl --fail -si --output /dev/null $AGENT_URL); do sleep 5; done;
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

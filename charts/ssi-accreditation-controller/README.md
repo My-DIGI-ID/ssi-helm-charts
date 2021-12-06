@@ -14,7 +14,7 @@ The following sections will break down into the specific value groups that relat
 
 | Parameter | Description                | Environment Variable Mapping | Default |
 | --------  | -------------------------- | ---------------------------- | ------- |
-| `apiKey`  | They accreditation API Key | `ACCR_API_KEY`               |         |
+| `APIKey`  | They accreditation API Key | `ACCR_API_KEY`               |         |
 
 ### `dbssl` Group
 
@@ -41,12 +41,15 @@ The following sections will break down into the specific value groups that relat
 
 ### `agent` Group
 
+The admin port is used by the controller to connect to the Aca-py agent, and also to execute the start-up initialisation script.  The client port is used for the container initialisation dependancy check.  Do not modify these unless the agent is running on different ports.
+
 | Parameter       | Description                                             | Environment Variable Mapping | Default |
 | --------------- | ------------------------------------------------------- | ---------------------------- | ------- |
 | `APIKey`        | API Key for the aca-py issuer, stored in secrets object | `ACCR_AGENT_API_KEY`         |         |
 | `webHookAPIKey` | Agent web-hook API Key, stored in secrets object        | `ACCR_AGENT_WEBHOOK_API_KEY` |         |
-| `url`           | Issue aca-py agent url                                  | `ACCR_AGENT_API_URL`         |         |
-| `port`          | Port number for acapy agent, stored in config map       | `ACCR_AGENT_PORT_ADMIN`      | `11080` |
+| `url`           | Issue aca-py agent url                                  | `ACCR_AGENT_API_URL`     |         |
+| `adminPort`     | Administation port for agent, stored in config map      | `ACCR_AGENT_PORT_ADMIN`      | `11080` |
+| `port`          | Client port for agent, used for initialising container  |                              | `11000` |
 
 ### `info` Group
 

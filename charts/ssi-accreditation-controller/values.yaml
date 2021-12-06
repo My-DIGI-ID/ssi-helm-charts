@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/my-digi-id/ssi-acmgt-accreditation-controller
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.2.1"
+  tag: "1.2.2"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -108,7 +108,8 @@ agent:
   APIKey: APIKEY
   webHookAPIKey: AGENTAPIKEY
   url: http://accreditation-agent
-  port: "11080"
+  port: "11000"
+  adminPort: "11080"
 
 info:
   contactEmail: ""
@@ -165,7 +166,7 @@ ssl:
   sslKeyStoreType: ""
   sslKeyAlias: ""
 
-apiKey: APIKEY
+APIKey: APIKEY
 
 overrides: {}
 
