@@ -124,11 +124,24 @@ spec:
           - name: ACAPY_WALLET_STORAGE_CREDS
             value: {{ include "ssi-aca-py.postgresCredentials" . | toJson }}
           {{- end }}
+          startupProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: client
           livenessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 5 
+            failureThreshold: 2
             httpGet:
               path: /
               port: client
           readinessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            failureThreshold: 2
             httpGet:
               path: /
               port: client
