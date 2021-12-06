@@ -270,6 +270,16 @@ entries:
   ssi-accreditation-ui:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-12-06T14:44:25.39741065Z"
+    description: A Helm chart for Kubernetes
+    digest: 8d2e123617ad46658579a579b23134fe281b292a6755148197b5f8dd20fc0077
+    name: ssi-accreditation-ui
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-accreditation-ui-0.1.4/ssi-accreditation-ui-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-11-19T13:54:16.491362172Z"
     description: A Helm chart for Kubernetes
     digest: 23c9f2865359196637ab19b0bafcaae97fb86e5342911c6e6bcd21c9c6e70dce
@@ -452,4 +462,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-12-06T14:37:18.19810565Z"
+generated: "2021-12-06T14:44:25.397480852Z"
