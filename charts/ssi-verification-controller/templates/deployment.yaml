@@ -28,6 +28,20 @@ spec:
       serviceAccountName: {{ include "ssi-verification-controller.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: wait-for-mongo
+        image: curlimages/curl
+        env:  
+        - name: MONGODB_URL
+          {{- if  .Values.mongodb.host }}
+          value: {{.Values.mongodb.host}}:{{ .Values.overrides.VERI_MONGODB_PORT | default "27017" }}
+          {{- else }}
+          value: {{.Release.Name}}-mongodb:{{ .Values.overrides.VERI_MONGODB_PORT | default "27017" }}
+          {{- end }}
+        command:
+          - sh
+          - -c
+          - until $(curl --fail -si --output /dev/null $MONGODB_URL); do sleep 5; done;
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -101,6 +115,8 @@ spec:
               value: {{ .Values.guest.schema | default "" | quote }}
             - name: VERI_EMAIL_GUEST_INVITATION_REDIRECT
               value: {{ .Values.guest.invitationRedirect | default (printf "http://%s:8080/guest/invitation/redirect?id={id}"  $fullName) | quote }}
+            - name: VERI_VERIFICATION_TIMEOUT_IN_SECONDS
+              value: {{ .Values.guest.verificationTimeout | default "60" | quote }}
             - name: ACCR_API_URL
               value: {{ .Values.accreditation.url | default "" | quote }}
             - name: VERI_ACCR_API_SSL_VERIFY_HOSTNAME
@@ -121,6 +137,8 @@ spec:
               value: {{ .Values.swagger.host | default "https://localhost{port}/{path}/" | quote }}
             - name: VERI_CONTROLLER_SSL_ENABLED
               value: {{ .Values.ssl.enabled | default "false" | quote }}
+            - name: VERI_SCHEDULER_POOLSIZE
+              value: {{ .Values.scheduler.poolSize | default "5" | quote }}
             {{- include "helpers.list-env-variables" . | indent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

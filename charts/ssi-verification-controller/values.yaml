@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/my-digi-id/ssi-acmgt-verification-controller
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.2.1"
+  tag: "1.2.2"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -142,6 +142,10 @@ guest:
   schema: ""
   invitationRedirect:	http://verification-controller:8080/guest/invitation/redirect?id={id}
   #checkoutDelay:	120
+  verificationTimeout: 60
+
+scheduler:
+  poolSize: 5
 
 accreditation:
   webHookAPIKey: APIKEY

@@ -99,6 +99,7 @@ The following sections will break down into the specific value groups that relat
 | `name`               | Guest credential for acapy agent and indy nodes    | `GUEST_CREDENTIAL_NAME`                |                                                               |
 | `schema`             | Guest db schema                                    | `GUEST_CREDENTIAL_SCHEMA`              |                                                               |
 | `checkoutDelay`      | Checkout delay in seconds                          | `VERI_CHECKOUT_DELAY_IN_SECONDS`       | `120`                                                         |
+| `verificationTimeout`| Verification timeout in seconds                    | `VERI_VERIFICATION_TIMEOUT_IN_SECONDS` | `60`                                                          |
 
 ### `accreditation` Group
 
@@ -150,6 +151,12 @@ The full list of possible mongoDB helm values can be found at [Bitnami MongoDB C
 | `auth.authDatabase`        | MongoDB authorisation database, stored in configmap                                      | `VERI_MONGODB_AUTH_DB_NAME`   | `admin`                 |
 | `persistence.storageClass` | Kubernetes storage class for PVC                                                         |                               |                         |
 | `persistence.size`         | PVC storage size to request                                                              |                               | `10Gi`                  |
+
+### `scheduler` Group
+
+| Parameter             | Description                            | Environment Variable Mapping            | Default |
+| --------------------- | -------------------------------------- | --------------------------------------- | ------- |
+| `poolSize`            | Scheduler's pool size                  | `VERI_SCHEDULER_POOLSIZE`               | `5`     |
 
 ### Defaulted Variables
 
