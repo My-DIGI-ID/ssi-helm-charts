@@ -403,6 +403,21 @@ entries:
   ssi-verification-controller:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-12-06T14:45:52.441225311Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.26.4
+    description: A Helm chart for Kubernetes
+    digest: 9b84feaa1d55fbd2f24c17836f8bd0febd6e4f92e70c476e21247cc7c3ce6330
+    name: ssi-verification-controller
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-controller-0.1.6/ssi-verification-controller-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-11-19T13:55:33.748998646Z"
     dependencies:
     - condition: mongodb.enabled
@@ -462,4 +477,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-12-06T14:44:25.397480852Z"
+generated: "2021-12-06T14:45:52.444624972Z"
