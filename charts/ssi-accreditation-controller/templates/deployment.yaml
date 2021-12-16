@@ -28,6 +28,30 @@ spec:
       serviceAccountName: {{ include "ssi-accreditation-controller.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: wait-for-mongo
+        image: curlimages/curl
+        env:  
+        - name: MONGODB_URL
+          {{- if  .Values.mongodb.host }}
+          value: {{.Values.mongodb.host}}:{{ .Values.overrides.ACCR_MONGODB_PORT | default "27017" }}
+          {{- else }}
+          value: {{.Release.Name}}-mongodb:{{ .Values.overrides.ACCR_MONGODB_PORT | default "27017" }}
+          {{- end }}
+        command:
+          - sh
+          - -c
+          - until $(curl --fail -si --output /dev/null $MONGODB_URL); do sleep 5; done;
+
+      - name: wait-for-agent
+        image: curlimages/curl
+        env:
+        - name: AGENT_URL
+          value: {{ .Values.agent.url }}:{{ .Values.agent.port | default "11000" }}
+        command:
+          - sh
+          - -c
+          - until $(curl --fail -si --output /dev/null $AGENT_URL); do sleep 5; done;
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -41,14 +65,24 @@ spec:
             - name: {{ .Values.service.port }}-tcp
               containerPort: {{ .Values.service.port }} 
               protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
+         {{- if .Values.management.health.liveness.enabled }}
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/livenessState"
+              port: {{ .Values.service.port }} 
+            initialDelaySeconds: {{ .Values.management.health.liveness.initialDelay | default 5 }}
+            periodSeconds: {{ .Values.management.health.liveness.period | default 5 }}
+            failureThreshold: {{ .Values.management.health.liveness.failureThreshold | default 2 }}
+         {{- end }}
+         {{- if .Values.management.health.readiness.enabled }}
+          readinessProbe:
+            httpGet:
+              path: "/actuator/health/readinessState"
+              port: {{ .Values.service.port }} 
+            initialDelaySeconds: {{ .Values.management.health.readiness.initialDelay | default 5 }}
+            periodSeconds: {{ .Values.management.health.readiness.period | default 5 }}
+            failureThreshold: {{ .Values.management.health.readiness.failureThreshold | default 2 }}
+         {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom: 
@@ -117,6 +151,20 @@ spec:
               value: {{ .Values.swagger.host | default "https://localhost{port}/{path}/" | quote }}
             - name: ACCR_CONTROLLER_SSL_ENABLED
               value: {{ .Values.ssl.enabled | default "false" | quote }}
+            - name: ACCR_MGMT_DISCOVERY_ENABLED
+              value: {{ .Values.management.discovery | default "false" | quote }}
+            - name: ACCR_MGMT_EXPOSURE_INCLUDE
+              value: {{ .Values.management.exposure | default "health" | quote }}
+            - name: ACCR_MGMT_ENDPOINT_HEALTH_ENABLED
+              value: {{ or .Values.management.health.liveness.enabled .Values.management.health.readiness.enabled | quote  }}
+            - name: ACCR_MGMT_ENDPOINT_HEALTH_SHOW_DETAILS
+              value: {{ .Values.management.health.details | default "always" | quote }}
+            - name: ACCR_MGMT_HEALTH_LIVENESS_STATE_ENABLED
+              value: {{ .Values.management.health.liveness.enabled | quote }}
+            - name: ACCR_MGMT_HEALTH_READINESS_STATE_ENABLED
+              value: {{ .Values.management.health.readiness.enabled | quote }}
+            - name: ACCR_MGMT_ENDPOINT_INFO_ENABLED
+              value: {{ .Values.management.info.enabled | default "false" | quote }}
             {{- include "helpers.list-env-variables" . | indent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

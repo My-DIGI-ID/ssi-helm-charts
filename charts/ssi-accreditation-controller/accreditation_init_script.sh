@@ -7,6 +7,7 @@ echo "EMPLOYEE_CREDENTIAL_NAME: ${EMPLOYEE_CREDENTIAL_NAME}"
 echo "GUEST_CREDENTIAL_SCHEMA: ${GUEST_CREDENTIAL_SCHEMA}"
 echo "GUEST_CREDENTIAL_NAME: ${GUEST_CREDENTIAL_NAME}"
 echo ""
+
 if [ ! -e EMPLOYEE_CREDENTIAL_DEFINITION_ID ]; then
   echo "Creating employee credential definition"
   curl -X POST "${AGENT_URL}/credential-definitions" \

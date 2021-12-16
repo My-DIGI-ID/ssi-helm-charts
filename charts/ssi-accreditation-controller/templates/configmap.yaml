@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 data:
   ACCR_INFO_VERSION: {{ .Chart.Version }}
-  ACCR_AGENT_PORT_ADMIN: {{ .Values.agent.port | default "11080" | quote }}
+  ACCR_AGENT_PORT_ADMIN: {{ .Values.agent.adminPort| default "11080" | quote }}
   ACCR_UI_PORT:	{{ .Values.ui.port | default "4200" | quote }}
   ACCR_UI_HOST: {{ .Values.ui.host | default (printf "http://%s-ssi-accreditation-ui" .Release.Name) | quote }}
   ACCR_EMAIL_TEMPLATE_GUEST_INVITATION: {{ .Values.overrides.ACCR_EMAIL_TEMPLATE_GUEST_INVITATION | default "/data/templates/guest-invitation-email-template.html" | quote }}

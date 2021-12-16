@@ -14,7 +14,7 @@ The following sections will break down into the specific value groups that relat
 
 | Parameter | Description                | Environment Variable Mapping | Default |
 | --------  | -------------------------- | ---------------------------- | ------- |
-| `apiKey`  | They accreditation API Key | `ACCR_API_KEY`               |         |
+| `APIKey`  | They accreditation API Key | `ACCR_API_KEY`               |         |
 
 ### `dbssl` Group
 
@@ -41,12 +41,15 @@ The following sections will break down into the specific value groups that relat
 
 ### `agent` Group
 
+The admin port is used by the controller to connect to the Aca-py agent, and also to execute the start-up initialisation script.  The client port is used for the container initialisation dependancy check.  Do not modify these unless the agent is running on different ports.
+
 | Parameter       | Description                                             | Environment Variable Mapping | Default |
 | --------------- | ------------------------------------------------------- | ---------------------------- | ------- |
 | `APIKey`        | API Key for the aca-py issuer, stored in secrets object | `ACCR_AGENT_API_KEY`         |         |
 | `webHookAPIKey` | Agent web-hook API Key, stored in secrets object        | `ACCR_AGENT_WEBHOOK_API_KEY` |         |
-| `url`           | Issue aca-py agent url                                  | `ACCR_AGENT_API_URL`         |         |
-| `port`          | Port number for acapy agent, stored in config map       | `ACCR_AGENT_PORT_ADMIN`      | `11080` |
+| `url`           | Issue aca-py agent url                                  | `ACCR_AGENT_API_URL`     |         |
+| `adminPort`     | Administation port for agent, stored in config map      | `ACCR_AGENT_PORT_ADMIN`      | `11080` |
+| `port`          | Client port for agent, used for initialising container  |                              | `11000` |
 
 ### `info` Group
 
@@ -120,6 +123,25 @@ The following sections will break down into the specific value groups that relat
 | `sslKeyStorePassword` | SSL Keystore password                  | `ACCR_CONTROLLER_SSL_KEYSTORE_PASSWORD` |         |
 | `sslKeyStoreType`     | SSL Keystore type                      | `ACCR_CONTROLLER_SSL_KEYSTORE_TYPE`     |         |
 | `sslKeyAlias`         | SSL Key alias                          | `ACCR_CONTROLLER_SSL_KEY_ALIAS`         |         |
+
+### `management` Group
+
+This section will allow the enabling of the Spring Boot [Actuators](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.enabling).  Not all available actuators are allowed to be activated, only those relaated to the [health](https://www.baeldung.com/spring-boot-health-indicators) endpoint and `info`.  By default these are disabled.  If `health` is enabled then the `liveness` and `readiness` probes can be enabled in the deployment.
+
+| Parameter                           | Description                                    | Environment Variable Mapping               | Default |
+| ----------------------------------- | ---------------------------------------------- | ------------------------------------------ | ------- |
+| `discovery`                         | Enables the actuator endpoint discovery option | `ACCR_MGMT_DISCOVERY_ENABLED`              | `false` |
+| `exposure`                          | Comma sepearated list of actuators to expose   | `ACCR_MGMT_EXPOSURE_INCLUDE`               | `health`|
+| `health.details`                    | Enables additional details for health endpoint | `ACCR_MGMT_ENDPOINT_HEALTH_SHOW_DETAILS`   | `always`|
+| `health.liveness.enabled`           | Enables the liveness health endpoint           | `ACCR_MGMT_HEALTH_LIVENESS_STATE_ENABLED`  | `true`  |
+| `health.liveness.failureThreshold`  | Set the liveness `failureThreshold` value      |                                            | `2`     |
+| `health.liveness.initialDelay`      | Set the liveness `initialDelaySeconds` value   |                                            | `20`    |
+| `health.liveness.period`            | Set the liveness `periodSeconds` value         |                                            | `10`    |
+| `health.readiness.enabled`          | Enables the readiness health endpoint          | `ACCR_MGMT_HEALTH_READINESS_STATE_ENABLED` | `true`  |
+| `health.readiness.failureThreshold` | Set the readiness `failureThreshold` value     |                                            | `2`     |
+| `health.readiness.initialDelay`     | Set the readiness `initialDelaySeconds` value  |                                            | `20`    |
+| `health.readiness.period`           | Set the readiness `periodSeconds` value        |                                            | `10`    |
+| `info.enabled`                      | Enables the default info endpoint              | `ACCR_MGMT_ENDPOINT_INFO_ENABLED`          | `false` |
 
 ### `mongodb` Group
 
