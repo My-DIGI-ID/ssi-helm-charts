@@ -52,7 +52,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: VERIFICATION_CONTROLLER_BASE_URL
-              value: {{ .Values.verification.url | default (printf "http://%s-ssi-verification-controller:8080/api/v2" .Release.Name) | quote }} 
+              value: {{ .Values.verification.url | default (printf "http://%s-ssi-verification-controller:8080" .Release.Name) | quote }} 
             - name: KEYCLOAK_CLIENT_ID
               value: {{ .Values.keycloak.clientID | default "verification-ui" | quote }}
             - name: KEYCLOAK_REALM
@@ -60,7 +60,11 @@ spec:
             - name: KEYCLOAK_URL
               value: {{ .Values.keycloak.url | default (printf "http://%s-keycloak:8080" .Release.Name) | quote }}
             - name: QR_CODE_BASE_URL
-              value: {{ .Values.verification.qrBaseURL | default (printf "http://%s-ssi-verification-controller:8080/api/v2" .Release.Name) | quote }}
+              value: {{ .Values.verification.qrBaseURL | default (printf "http://%s-ssi-verification-controller:8080" .Release.Name) | quote }}
+            - name: LOCATION_ID
+              value: {{ .Values.config.locationID | default "1" | quote }}
+            - name: TERMINAL_ID
+              value: {{ .Values.config.terminalID | default "1" | quote }}
             {{- include "helpers.list-env-variables" . | indent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

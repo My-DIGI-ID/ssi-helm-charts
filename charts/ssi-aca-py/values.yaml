@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/my-digi-id/ssi-aca-py
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.0.0"
+  tag: "0.7.0"
 
 
 logLevel: info
@@ -21,9 +21,11 @@ schemaId:
 credentialName: 
 seed: 
 
+endpointOverride:
+
 webhook:
   url:
-  apikey: 
+  apiKey: 
 
 # tailsServerEndpoint: aries:6543
 

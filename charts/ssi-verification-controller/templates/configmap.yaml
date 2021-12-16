@@ -33,7 +33,7 @@ data:
   VERI_MONGODB_DB_NAME: {{ .Values.mongodb.auth.database }}
   VERI_MONGODB_AUTH_DB_NAME: {{ .Values.mongodb.auth.authDatabase | default .Values.mongodb.auth.database | quote }}
   VERI_MONGODB_HOST:  {{ .Values.mongodb.host | default (printf "%s-mongodb" .Release.Name)  | quote }}
-  VERI_MONGODB_USERNAME: {{ .Values.mongodb.host | default (printf "%s-mongodb" .Release.Name)  | quote }}
+  VERI_MONGODB_USERNAME: {{ .Values.mongodb.auth.rootUser }}
   VERI_AGENT_NAME:	{{ .Values.overrides.VERI_AGENT_NAME | default "Verification-Agent" | quote }}
   AGENT_DIDCOMM_URL: {{ .Values.agent.didcommURL | default "didcomm://example.org?m=" | quote }}
   VERI_CHECKOUT_DELAY_IN_SECONDS: {{ .Values.guest.checkoutDelay | default "120" | quote }}

@@ -28,3 +28,9 @@ The following sections will break down into the specific value groups that relat
 | `url`            | Verification controller URL, this is issued directly from the browser so a public url is expected, with `/api/v2` suffix | `VERIFICATION_CONTROLLER_BASE_URL` | `http://<releasename>-ssi-verification-controller:8080/api/v2` |
 | `qrBaseURL`      | Verification URL, this is issued directly from the browser so a public url is expected, with `/api/v2` suffix | `QR_CODE_BASE_URL` | |
 
+### `config` Group
+
+| Parameter        | Description                                                | Variable Mapping     | Config File Mapping                   | Default               |
+| ---------------- | ---------------------------------------------------------- | -------------------- | ------------------------------------- | --------------------- |
+| locationID       |                                                            | `LOCATION_ID`        | `VERI_LOCATION_ID`                    | `1`                   |
+| terminalID       |                                                            | `TERMINAL_ID`        | `VERI_TERMINAL_ID`                    | `1`                   |

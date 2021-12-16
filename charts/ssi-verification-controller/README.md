@@ -99,6 +99,7 @@ The following sections will break down into the specific value groups that relat
 | `name`               | Guest credential for acapy agent and indy nodes    | `GUEST_CREDENTIAL_NAME`                |                                                               |
 | `schema`             | Guest db schema                                    | `GUEST_CREDENTIAL_SCHEMA`              |                                                               |
 | `checkoutDelay`      | Checkout delay in seconds                          | `VERI_CHECKOUT_DELAY_IN_SECONDS`       | `120`                                                         |
+| `verificationTimeout`| Verification timeout in seconds                    | `VERI_VERIFICATION_TIMEOUT_IN_SECONDS` | `60`                                                          |
 
 ### `accreditation` Group
 
@@ -151,6 +152,31 @@ The full list of possible mongoDB helm values can be found at [Bitnami MongoDB C
 | `persistence.storageClass` | Kubernetes storage class for PVC                                                         |                               |                         |
 | `persistence.size`         | PVC storage size to request                                                              |                               | `10Gi`                  |
 
+### `scheduler` Group
+
+| Parameter             | Description                            | Environment Variable Mapping            | Default |
+| --------------------- | -------------------------------------- | --------------------------------------- | ------- |
+| `poolSize`            | Scheduler's pool size                  | `VERI_SCHEDULER_POOLSIZE`               | `5`     |
+
+### `management` Group
+
+This section will allow the enabling of the Spring Boot [Actuators](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.enabling).  Not all available actuators are allowed to be activated, only those relaated to the [health](https://www.baeldung.com/spring-boot-health-indicators) endpoint and `info`.  By default these are disabled.  If `health` is enabled then the `liveness` and `readiness` probes can be enabled in the deployment.
+
+| Parameter                           | Description                                    | Environment Variable Mapping               | Default |
+| ----------------------------------- | ---------------------------------------------- | ------------------------------------------ | ------- |
+| `discovery`                         | Enables the actuator endpoint discovery option | `VERI_MGMT_DISCOVERY_ENABLED`              | `false` |
+| `exposure`                          | Comma sepearated list of actuators to expose   | `VERI_MGMT_EXPOSURE_INCLUDE`               |         |
+| `health.details`                    | Enables additional details for health endpoint | `VERI_MGMT_ENDPOINT_HEALTH_SHOW_DETAILS`   | `always`|
+| `health.liveness.enabled`           | Enables the liveness health endpoint           | `VERI_MGMT_HEALTH_LIVENESS_STATE_ENABLED`  | `true`  |
+| `health.liveness.failureThreshold`  | Set the liveness `failureThreshold` value      |                                            | `2`     |
+| `health.liveness.initialDelay`      | Set the liveness `initialDelaySeconds` value   |                                            | `20`    |
+| `health.liveness.period`            | Set the liveness `periodSeconds` value         |                                            | `10`    |
+| `health.readiness.enabled`          | Enables the readiness health endpoint          | `VERI_MGMT_HEALTH_READINESS_STATE_ENABLED` | `true`  |
+| `health.readiness.failureThreshold` | Set the readiness `failureThreshold` value     |                                            | `5`     |
+| `health.readiness.initialDelay`     | Set the readiness `initialDelaySeconds` value  |                                            | `20`    |
+| `health.readiness.period`           | Set the readiness `periodSeconds` value        |                                            | `10`    |
+| `info.enabled`                      | Enables the default info endpoint              | `VERI_MGMT_ENDPOINT_INFO_ENABLED`          | `false` |
+
 ### Defaulted Variables
 
 These are typically expected to be left as defaults.  However, if they require being overridden then add the variables explicitly to the `overrides` value group, for example:
@@ -159,6 +185,7 @@ These are typically expected to be left as defaults.  However, if they require b
 overrides:
   VERI_MONGODB_PORT: 27018
 ```
+
 Because of the dependancy on servivces such as keycloak, image build there are several variables which are not explicitly overwritten, or have values mappings.  The following is a list of those variables.
 
 | Variable                             | Description                                                                               | Default                                                        |

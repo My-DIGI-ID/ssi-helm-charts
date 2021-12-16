@@ -46,6 +46,14 @@ ingress:
   host: INGRESS_HOST
 ```
 
+#### ACAPY_ENDPOINT Variable
+
+The `ACAPY_ENDPOINT` variable is used to set the URL returned by the issuer when requested.  There values setting for `endpointOverride` will provide a static route for the agent to use.  If this is not set then the variable logic is:
+
+1. If `ingress.enabled` is set to true the variable is constructed from the ingress domain settings
+2. The default is the URL is constructed for the internal service reference to the agent
+   1. This might be useful if manual ingress settings are created at the cluster edge
+
 ### Verifier
 
 Save these values to a `acapy-values.yaml` file and update the variables (for further cutomizations see Configuration section):
@@ -135,3 +143,4 @@ helm upgrade --install <YOUR_RELEASE_NAME> ssi/ssi-aca-py -f acapy-values.yaml
 | `autoscaling.maxReplicas`                                |                                                                                                                                                                                               | `100`                                  |
 | `autoscaling.targetCPUUtilizationPercentage`             |                                                                                                                                                                                               | `80`                                   |
 | `autoscaling.targetMemoryUtilizationPercentage`          |                                                                                                                                                                                               | `80`                                   |
+| `endpointOverride`                  |  A static URL which will override the `ACAPY_ENDPOINT` variable                                  |
