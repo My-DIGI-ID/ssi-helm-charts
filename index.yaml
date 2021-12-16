@@ -3,6 +3,26 @@ entries:
   ssi-aca-py:
   - apiVersion: v2
     appVersion: 0.7.0
+    created: "2021-12-16T15:32:43.307102306Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.10.1
+    - condition: isIssuer
+      name: ssi-tails-server
+      repository: https://my-digi-id.github.io/ssi-helm-charts/
+      version: 0.1.5
+    description: Aries Cloud Agent
+    digest: 5879dd732a41a52728e6098c0a0cf45f768e998574ea3e4595a76498c23646e6
+    icon: https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Smiley.jpg/261px-A_Smiley.jpg
+    name: ssi-aca-py
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-aca-py-0.2.11/ssi-aca-py-0.2.11.tgz
+    version: 0.2.11
+  - apiVersion: v2
+    appVersion: 0.7.0
     created: "2021-12-06T14:35:48.247428502Z"
     dependencies:
     - condition: postgresql.enabled
@@ -223,6 +243,21 @@ entries:
     version: 0.1.0
   ssi-accreditation-controller:
   - apiVersion: v2
+    appVersion: 1.2.3
+    created: "2021-12-16T15:32:43.504939626Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.26.4
+    description: SSI Accreditation Controller
+    digest: 91ca28756154043ebeecdde189366796c54a0e1aa40453cf4ba8a64f92a3b62e
+    name: ssi-accreditation-controller
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-accreditation-controller-0.1.6/ssi-accreditation-controller-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-12-06T14:37:18.198044048Z"
     dependencies:
@@ -268,6 +303,16 @@ entries:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-accreditation-controller-0.1.1/ssi-accreditation-controller-0.1.1.tgz
     version: 0.1.1
   ssi-accreditation-ui:
+  - apiVersion: v2
+    appVersion: 1.2.3
+    created: "2021-12-16T15:32:43.657962933Z"
+    description: SSI Accreditation User Interface
+    digest: e9425256807bccccdc7746dc651c3476a80c08a3b13d1deeaff1c292fbaf3c03
+    name: ssi-accreditation-ui
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-accreditation-ui-0.1.5/ssi-accreditation-ui-0.1.5.tgz
+    version: 0.1.5
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-12-06T14:44:25.39741065Z"
@@ -402,6 +447,21 @@ entries:
     version: 0.1.0
   ssi-verification-controller:
   - apiVersion: v2
+    appVersion: 1.2.3
+    created: "2021-12-16T15:32:43.849677297Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.26.4
+    description: SSI Verification Controller
+    digest: 92f877ea1278135dace0b684e1ecac5a8abb62a56ca82c5487e55551497083b9
+    name: ssi-verification-controller
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-controller-0.1.7/ssi-verification-controller-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-12-06T14:45:52.441225311Z"
     dependencies:
@@ -448,6 +508,16 @@ entries:
     version: 0.1.2
   ssi-verification-ui:
   - apiVersion: v2
+    appVersion: 1.2.3
+    created: "2021-12-16T15:32:44.075358473Z"
+    description: SSI Verification User Interface
+    digest: ccc0dc2d34d8577debcf0bd581d14d143fd91dde48010ff1c3a97d7d0d6d2fcd
+    name: ssi-verification-ui
+    type: application
+    urls:
+    - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.7/ssi-verification-ui-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-12-06T14:46:46.15408254Z"
     description: A Helm chart for Kubernetes
@@ -487,4 +557,4 @@ entries:
     urls:
     - https://github.com/My-DIGI-ID/ssi-helm-charts/releases/download/ssi-verification-ui-0.1.2/ssi-verification-ui-0.1.2.tgz
     version: 0.1.2
-generated: "2021-12-06T14:46:46.154184343Z"
+generated: "2021-12-16T15:32:44.075469774Z"
